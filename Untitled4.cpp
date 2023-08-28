@@ -21,10 +21,10 @@ int main ()
     char lastInput[100];
     char* wrongSymbolPointer = 0;
 
-    printf ("Введите коэффициенты: ");
+    printf ("Р’РІРµРґРёС‚Рµ РєРѕСЌС„С„РёС†РёРµРЅС‚С‹: ");
     if (scanf ("%lg %lg %s", &a, &b,lastInput) != 3)
     {
-        printf ("Введены некорректные данные");
+        printf ("Р’РІРµРґРµРЅС‹ РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РґР°РЅРЅС‹Рµ");
         return 1;
     }
 
@@ -32,7 +32,7 @@ int main ()
 
     if(*wrongSymbolPointer != '\0')
     {
-        printf ("Введены некорректные данные");
+        printf ("Р’РІРµРґРµРЅС‹ РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РґР°РЅРЅС‹Рµ");
         return 1;
     }
 
@@ -41,16 +41,16 @@ int main ()
     switch (nRoots)
     {
         case InfiniteNumberOfRoots:
-            printf ("Бесконечное множество корней");
+            printf ("Р‘РµСЃРєРѕРЅРµС‡РЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РєРѕСЂРЅРµР№");
             break;
         case NoRoots:
-            printf ("Нет корней");
+            printf ("РќРµС‚ РєРѕСЂРЅРµР№");
             break;
         case OneRoot:
-            printf ("Найден один корень %lg", x1);
+            printf ("РќР°Р№РґРµРЅ РѕРґРёРЅ РєРѕСЂРµРЅСЊ %lg", x1);
             break;
         case TwoRoots:
-            printf ("Найдены два корня: %lg и %lg", x1, x2);
+            printf ("РќР°Р№РґРµРЅС‹ РґРІР° РєРѕСЂРЅСЏ: %lg Рё %lg", x1, x2);
             break;
         default:
             break;
