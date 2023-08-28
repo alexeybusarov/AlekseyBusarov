@@ -1,72 +1,101 @@
 #include <TXLib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
-int SolveSquare (double a, double b, double c, double *x1, double *x2)
-    {
-    if (a == 0)
-        {
-        if (b == 0)
-            {
-            if (c == 0)
-                {
-                return 0;
-                }
-            else /*Если c не равно 0*/
-                {
-                return 1;
-                }
-            }
-        else /*Если b не равно 0*/
-            {
-            *x1 = -c / b;
-            return 2;
-            }
-        }
-    else /*Если a не равно 0*/
-        {
-        double dt = b*b - 4*a*c;
-        if (dt < 0)
-            {
-            return 1;
-            }
-        if (dt == 0)
-            {
-            *x1 = -b/(2*a);
-            return 2;
-            }
-        if (dt > 0)
-            {
-            *x1 = (-b - sqrt(dt)) / (2*a);
-            *x2 = (-b + sqrt(dt)) / (2*a);
-            return 3;
-            }
-        }
-    }
 
+typedef enum
+{
+     InfiniteNumberOfRoots,
+     NoRoots,
+     OneRoot,
+     TwoRoots
+}SolveCase;
+
+bool isNull(double);
+
+SolveCase solveSquare(double, double, double, double*, double*);
 
 int main ()
+{
+    double a = NAN, b = NAN, c = NAN;
+    char lastInput[100];
+    char* wrongSymbolPointer = 0;
+
+    printf ("Введите коэффициенты: ");
+    if (scanf ("%lg %lg %s", &a, &b,lastInput) != 3)
     {
-        double a = NULL, b = NULL, c = NULL;
-        if (scanf ("%lg %lg %lg", &a, &b, &c) == 3)
-            {
-            double x1 = NULL, x2 = NULL;
-            int nRoots = SolveSquare (a, b, c, &x1, &x2);
-            switch (nRoots)
-                {
-                case 0: printf ("Бесконечное количество корней");
-                        break;
-                case 1: printf ("Корней нет");
-                        break;
-                case 2: printf ("Корень равен %lg", x1);
-                        break;
-                case 3: printf ("Корни равны %lg и %lg", x1, x2);
-                        break;
-                default: printf ("main(): ERROR: nRoots = %d\n", nRoots);
-                }
-            }
-        else
-            {
-            printf ("Ошибка");
-            }
+        printf ("Введены некорректные данные");
+        return 1;
     }
 
+    c = strtod(lastInput, &wrongSymbolPointer);
+
+    if(*wrongSymbolPointer != '\0')
+    {
+        printf ("Введены некорректные данные");
+        return 1;
+    }
+
+    double x1 = NAN, x2 = NAN;
+    SolveCase nRoots = solveSquare (a, b, c, &x1, &x2);
+    switch (nRoots)
+    {
+        case InfiniteNumberOfRoots:
+            printf ("Бесконечное множество корней");
+            break;
+        case NoRoots:
+            printf ("Нет корней");
+            break;
+        case OneRoot:
+            printf ("Найден один корень %lg", x1);
+            break;
+        case TwoRoots:
+            printf ("Найдены два корня: %lg и %lg", x1, x2);
+            break;
+        default:
+            break;
+    }
+    return 0;
+}
+
+
+bool isNull (double q)
+{
+    return fabs(q) < 0.000000000001;
+}
+
+
+SolveCase solveSquare (double a, double b, double c, double *x1, double *x2)
+{
+    if(isNull(a) && isNull(b) && isNull(c))
+        return InfiniteNumberOfRoots;
+
+
+    if (isNull(a))
+    {
+        if (isNull(b))
+            return NoRoots;
+        else
+        {
+            *x1 = -c / b;
+            return OneRoot;
+        }
+    }
+
+    //a != 0
+    double dt = b*b - 4*a*c;
+    if(dt < 0)
+    {
+        return NoRoots;
+    }
+    else if (isNull(dt))
+    {
+        *x1 = -b/(2*a);
+        return OneRoot;
+    }
+
+    //a != 0 && dt > 0
+    *x1 = (-b - sqrt(dt))/(2*a);
+    *x2 = (-b + sqrt(dt))/(2*a);
+    return TwoRoots;
+}
